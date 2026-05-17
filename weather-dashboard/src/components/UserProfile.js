@@ -1,117 +1,64 @@
 import React, { useState } from 'react';
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebase/config';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../store/authSlice';
-import { setAutoRefresh, setRefreshInterval } from '../store/weatherSlice';
+import { useSelector } from 'react-redux';
+import './UserProfile.css';
 
-const UserProfile = () => {
-  const dispatch = useDispatch();
+const UserProfile = ({ onLogout }) => {
   const { user, isGuest } = useSelector(state => state.auth);
-  const { autoRefresh, refreshInterval } = useSelector(state => state.weather);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const handleLogout = async () => {
-    try {
-      if (!isGuest) {
-        await signOut(auth);
-      }
-      dispatch(logout());
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
+  const [showDropdown, setShowDropdown] = useState(false);
+  
+  const getInitials = (name) => {
+    return name ? name.charAt(0).toUpperCase() : 'U';
   };
-
-  const handleAutoRefreshToggle = () => {
-    dispatch(setAutoRefresh(!autoRefresh));
-  };
-
-  const handleIntervalChange = (interval) => {
-    dispatch(setRefreshInterval(interval));
-  };
-
+  
   return (
     <div className="user-profile">
-      <div 
-        className="user-avatar"
-        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-      >
-        {user && user.photoURL ? (
-          <img 
-            src={user.photoURL} 
-            alt={user.displayName || 'User'}
-            className="user-photo"
-            onError={(e) => {
-              e.target.style.display = 'none';
-              e.target.nextSibling.style.display = 'flex';
-            }}
-          />
-        ) : null}
-        <div className={`guest-avatar ${user && user.photoURL ? 'hidden' : ''}`}>
-          👤
-        </div>
-        <span className="user-name">
-          {user ? (user.displayName || 'User') : 'Guest'}
-        </span>
-        <span className={`dropdown-arrow ${isDropdownOpen ? 'open' : ''}`}>▼</span>
+      <div className="profile-trigger" onClick={() => setShowDropdown(!showDropdown)}>
+        {user?.photoURL ? (
+          <img src={user.photoURL} alt="Profile" className="profile-avatar" />
+        ) : (
+          <div className="profile-initials">
+            {getInitials(user?.displayName)}
+          </div>
+        )}
+        <span className="profile-name">{user?.displayName?.split(' ')[0] || 'User'}</span>
+        <span className="dropdown-arrow">▼</span>
       </div>
-
-      {isDropdownOpen && (
-        <div className="user-dropdown">
-          {user && (
-            <div className="user-info-section">
-              <div className="user-email">{user.email}</div>
-              <div className="user-status">Signed in with Google</div>
+      
+      {showDropdown && (
+        <div className="profile-dropdown">
+          <div className="dropdown-header">
+            <div className="dropdown-avatar">
+              {user?.photoURL ? (
+                <img src={user.photoURL} alt="Profile" />
+              ) : (
+                <div className="dropdown-initials">{getInitials(user?.displayName)}</div>
+              )}
             </div>
-          )}
+            <div className="dropdown-info">
+              <div className="dropdown-name">{user?.displayName}</div>
+              <div className="dropdown-email">{user?.email}</div>
+              {isGuest && <div className="guest-badge">Guest Mode</div>}
+            </div>
+          </div>
           
-          {isGuest && (
-            <div className="guest-notice">
-              <span className="guest-icon">👤</span>
-              You're browsing as guest
+          <div className="dropdown-divider"></div>
+          
+          <div className="dropdown-stats">
+            <div className="stat">
+              <span className="stat-value">{new Date().getHours()}</span>
+              <span className="stat-label">Hour</span>
             </div>
-          )}
-
-          <div className="dropdown-section">
-            <h4>Auto Refresh</h4>
-            <div className="setting-row">
-              <span>Update every {refreshInterval/1000}s</span>
-              <div className="toggle-switch">
-                <input
-                  type="checkbox"
-                  id="auto-refresh"
-                  checked={autoRefresh}
-                  onChange={handleAutoRefreshToggle}
-                />
-                <label htmlFor="auto-refresh" className="toggle-slider"></label>
-              </div>
+            <div className="stat">
+              <span className="stat-value">{new Date().toLocaleDateString()}</span>
+              <span className="stat-label">Date</span>
             </div>
           </div>
-
-          <div className="dropdown-section">
-            <h4>Refresh Interval</h4>
-            <div className="interval-buttons">
-              {[15000, 30000, 60000].map(interval => (
-                <button
-                  key={interval}
-                  className={`interval-btn ${refreshInterval === interval ? 'active' : ''}`}
-                  onClick={() => handleIntervalChange(interval)}
-                >
-                  {interval / 1000}s
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="dropdown-section">
-            <button
-              onClick={handleLogout}
-              className={`logout-btn ${isGuest ? 'guest-logout' : ''}`}
-            >
-              <span className="logout-icon">{isGuest ? '🚪' : '🔓'}</span>
-              {isGuest ? 'Exit Guest Mode' : 'Sign Out'}
-            </button>
-          </div>
+          
+          <div className="dropdown-divider"></div>
+          
+          <button onClick={onLogout} className="dropdown-logout">
+            🚪 Logout
+          </button>
         </div>
       )}
     </div>

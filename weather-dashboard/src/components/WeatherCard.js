@@ -1,16 +1,60 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFavorite, removeFavorite } from '../store/favoritesSlice';
+import './WeatherCard.css';
 
 const WeatherCard = ({ weatherData, onCardClick }) => {
   const dispatch = useDispatch();
   const favorites = useSelector(state => state.favorites.cities);
-  const unit = useSelector(state => state.weather.unit);
-  const lastUpdated = useSelector(state => state.weather.lastUpdated[weatherData.name]);
-
+  const { unit } = useSelector(state => state.weather);
+  
   const isFavorite = favorites.includes(weatherData.name);
-
-  const toggleFavorite = (e) => {
+  
+  const getTemperature = (kelvinTemp) => {
+    if (unit === 'celsius') {
+      return `${Math.round(kelvinTemp)}°C`;
+    }
+    return `${Math.round((kelvinTemp * 9/5) + 32)}°F`;
+  };
+  
+  const getWeatherIcon = (condition) => {
+    const icons = {
+      'clear': '☀️',
+      'clouds': '☁️',
+      'rain': '🌧️',
+      'drizzle': '🌦️',
+      'thunderstorm': '⛈️',
+      'snow': '❄️',
+      'mist': '🌫️',
+      'smoke': '💨',
+      'haze': '🌁',
+      'dust': '💨',
+      'fog': '🌫️'
+    };
+    return icons[condition.toLowerCase()] || '🌡️';
+  };
+  
+  const getBackgroundGradient = (temp, condition) => {
+    if (condition.toLowerCase().includes('rain')) {
+      return 'linear-gradient(135deg, #2c3e50, #3498db)';
+    }
+    if (temp > 35) {
+      return 'linear-gradient(135deg, #e74c3c, #c0392b)';
+    }
+    if (temp < 10) {
+      return 'linear-gradient(135deg, #34495e, #2c3e50)';
+    }
+    if (condition.toLowerCase().includes('cloud')) {
+      return 'linear-gradient(135deg, #95a5a6, #7f8c8d)';
+    }
+    return 'linear-gradient(135deg, #4facfe, #00f2fe)';
+  };
+  
+  const temp = weatherData.main.temp;
+  const condition = weatherData.weather[0].main;
+  const backgroundColor = getBackgroundGradient(temp, condition);
+  
+  const handleFavoriteClick = (e) => {
     e.stopPropagation();
     if (isFavorite) {
       dispatch(removeFavorite(weatherData.name));
@@ -18,83 +62,78 @@ const WeatherCard = ({ weatherData, onCardClick }) => {
       dispatch(addFavorite(weatherData.name));
     }
   };
-
-  const convertTemp = (temp) => {
-    return unit === 'fahrenheit' ? (temp * 9/5) + 32 : temp;
+  
+  const handleCardClick = () => {
+    onCardClick(weatherData.name);
   };
-
-  const getTempUnit = () => unit === 'fahrenheit' ? '°F' : '°C';
-
-  const getTimeAgo = () => {
-    if (!lastUpdated) return 'Just now';
-    const diff = Date.now() - lastUpdated;
-    const seconds = Math.floor(diff / 1000);
-    
-    if (seconds < 60) return `${seconds}s ago`;
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-    return `${Math.floor(seconds / 3600)}h ago`;
-  };
-
+  
   return (
     <div 
       className="weather-card"
-      onClick={() => onCardClick(weatherData.name)}
+      style={{ background: backgroundColor }}
+      onClick={handleCardClick}
     >
-      <div className="weather-card-header">
+      <div className="card-header">
         <div className="city-info">
           <h3 className="city-name">{weatherData.name}</h3>
-          <span className="country-code">{weatherData.sys.country}</span>
+          <p className="country">{weatherData.sys.country}</p>
         </div>
         <button 
-          onClick={toggleFavorite}
-          className={`favorite-btn ${isFavorite ? 'favorited' : ''}`}
+          className={`favorite-btn ${isFavorite ? 'active' : ''}`}
+          onClick={handleFavoriteClick}
         >
-          {isFavorite ? '❤️' : '🤍'}
+          {isFavorite ? '★' : '☆'}
         </button>
       </div>
-
+      
       <div className="weather-main">
-        <div className="weather-icon-container">
-          <img 
-            src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
-            alt={weatherData.weather[0].description}
-            className="weather-icon"
-          />
+        <div className="weather-icon-large">
+          {getWeatherIcon(condition)}
         </div>
-        <div className="temperature-section">
-          <div className="current-temp">
-            {Math.round(convertTemp(weatherData.main.temp))}{getTempUnit()}
-          </div>
-          <div className="weather-desc">
-            {weatherData.weather[0].description}
-          </div>
+        <div className="temperature">
+          {getTemperature(temp)}
+        </div>
+        <div className="weather-condition">
+          {weatherData.weather[0].description}
         </div>
       </div>
-
+      
       <div className="weather-details">
         <div className="detail-item">
-          <span className="detail-label">Feels like</span>
-          <span className="detail-value">
-            {Math.round(convertTemp(weatherData.main.feels_like))}{getTempUnit()}
-          </span>
+          <span className="detail-icon">💧</span>
+          <div className="detail-info">
+            <span className="detail-label">Humidity</span>
+            <span className="detail-value">{weatherData.main.humidity}%</span>
+          </div>
         </div>
         <div className="detail-item">
-          <span className="detail-label">Humidity</span>
-          <span className="detail-value">{weatherData.main.humidity}%</span>
+          <span className="detail-icon">💨</span>
+          <div className="detail-info">
+            <span className="detail-label">Wind Speed</span>
+            <span className="detail-value">{Math.round(weatherData.wind.speed)} km/h</span>
+          </div>
         </div>
         <div className="detail-item">
-          <span className="detail-label">Wind</span>
-          <span className="detail-value">{weatherData.wind.speed} m/s</span>
+          <span className="detail-icon">📊</span>
+          <div className="detail-info">
+            <span className="detail-label">Pressure</span>
+            <span className="detail-value">{weatherData.main.pressure} hPa</span>
+          </div>
         </div>
         <div className="detail-item">
-          <span className="detail-label">Pressure</span>
-          <span className="detail-value">{weatherData.main.pressure} hPa</span>
+          <span className="detail-icon">👁️</span>
+          <div className="detail-info">
+            <span className="detail-label">Visibility</span>
+            <span className="detail-value">{(weatherData.visibility / 1000).toFixed(1)} km</span>
+          </div>
         </div>
       </div>
-
+      
       <div className="card-footer">
-        <span className="update-time">Updated {getTimeAgo()}</span>
-        {weatherData.fromCache && <span className="cache-indicator">♻️ Cached</span>}
+        <span className="update-time">
+          Updated: {new Date(weatherData.dt * 1000).toLocaleTimeString()}
+        </span>
+        {weatherData.fromCache && <span className="cached-badge">Cached</span>}
       </div>
     </div>
   );

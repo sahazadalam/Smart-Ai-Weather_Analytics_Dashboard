@@ -1,0 +1,191 @@
+/* Weather Card Container */
+.weather-card {
+  border-radius: 16px;
+  padding: 1.25rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: cardAppear 0.4s ease;
+}
+
+@keyframes cardAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.weather-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.city-info {
+  flex: 1;
+}
+
+.city-name {
+  font-size: 1.25rem;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.country {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  margin: 0;
+  margin-top: 0.2rem;
+}
+
+/* Favorite Button */
+.favorite-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.favorite-btn.active {
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.2);
+}
+
+/* Weather Main */
+.weather-main {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.weather-icon-large {
+  font-size: 3rem;
+  margin-bottom: 0.25rem;
+}
+
+.temperature {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+  letter-spacing: 1px;
+}
+
+.weather-condition {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  text-transform: capitalize;
+}
+
+/* Weather Details */
+.weather-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detail-icon {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.detail-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-size: 0.6rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Card Footer */
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.6rem;
+  opacity: 0.7;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.cached-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.6rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .weather-card {
+    padding: 1rem;
+  }
+  
+  .city-name {
+    font-size: 1.1rem;
+  }
+  
+  .temperature {
+    font-size: 1.8rem;
+  }
+  
+  .weather-icon-large {
+    font-size: 2.5rem;
+  }
+  
+  .weather-details {
+    gap: 0.5rem;
+  }
+  
+  .detail-value {
+    font-size: 0.8rem;
+  }
+  
+  .favorite-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 1.1rem;
+  }
+}

@@ -1,0 +1,214 @@
+.admin-panel {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.admin-header {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.admin-logout {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.admin-tabs button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.admin-tabs button.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.admin-content {
+  padding: 2rem;
+}
+
+.users-table {
+  overflow-x: auto;
+}
+
+.users-table table {
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.users-table th,
+.users-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.users-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+}
+
+.add-alert-form {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.add-alert-form input,
+.add-alert-form select {
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  flex: 1;
+}
+
+.add-alert-form button {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.alert-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.alert-item.info {
+  border-left: 4px solid #3498db;
+}
+
+.alert-item.warning {
+  border-left: 4px solid #f39c12;
+}
+
+.alert-item.critical {
+  border-left: 4px solid #e74c3c;
+}
+
+.alert-item button {
+  padding: 0.5rem 1rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.settings-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 500px;
+}
+
+.settings-form label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+.settings-form input[type="number"] {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+
+.settings-form button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.stats-grid .stat-card {
+  background: white;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.no-data {
+  text-align: center;
+  padding: 2rem;
+  color: #999;
+}
+
+@media (max-width: 768px) {
+  .admin-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .admin-content {
+    padding: 1rem;
+  }
+  
+  .add-alert-form {
+    flex-direction: column;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

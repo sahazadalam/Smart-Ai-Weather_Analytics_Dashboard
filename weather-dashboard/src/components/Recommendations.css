@@ -1,0 +1,162 @@
+/* Recommendations Container */
+.recommendations-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.recommendations-header {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.recommendations-header h3 {
+  color: #333;
+  margin-bottom: 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.recommendations-header p {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+/* Recommendations Grid */
+.recommendations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Recommendation Card */
+.recommendation-card {
+  border-radius: 12px;
+  padding: 1rem;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.recommendation-card.warnings {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+}
+
+.recommendation-card.clothing {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: white;
+}
+
+.recommendation-card.travel {
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+  color: white;
+}
+
+.card-header {
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.recommendation-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recommendation-card li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.8rem;
+}
+
+.recommendation-card li:last-child {
+  border-bottom: none;
+}
+
+/* Current Weather Summary */
+.current-weather-summary {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.summary-item {
+  text-align: center;
+}
+
+.summary-item .label {
+  display: block;
+  font-size: 0.7rem;
+  color: #666;
+  margin-bottom: 0.2rem;
+}
+
+.summary-item .value {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.value.hot {
+  color: #ff6b6b;
+}
+
+.value.cold {
+  color: #4facfe;
+}
+
+.value.normal {
+  color: #43e97b;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .recommendations-container {
+    padding: 1rem;
+  }
+  
+  .recommendations-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .recommendations-header h3 {
+    font-size: 1rem;
+  }
+  
+  .card-header {
+    font-size: 0.85rem;
+  }
+  
+  .recommendation-card li {
+    font-size: 0.75rem;
+    padding: 0.3rem 0;
+  }
+  
+  .current-weather-summary {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}

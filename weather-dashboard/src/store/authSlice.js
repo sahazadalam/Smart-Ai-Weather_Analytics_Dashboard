@@ -1,23 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const loadUserFromStorage = () => {
-  try {
-    const user = localStorage.getItem('weatherUser');
-    return user ? JSON.parse(user) : null;
-  } catch {
-    return null;
-  }
+const initialState = {
+  user: null,
+  isAuthenticated: false,
+  isGuest: false,
+  loading: false,
+  error: null,
 };
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: {
-    user: loadUserFromStorage(),
-    isAuthenticated: !!loadUserFromStorage(),
-    loading: false,
-    error: null,
-    isGuest: false,
-  },
+  initialState,
   reducers: {
     loginStart: (state) => {
       state.loading = true;
@@ -28,33 +21,46 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = true;
       state.isGuest = false;
-      state.error = null;
-      localStorage.setItem('weatherUser', JSON.stringify(action.payload));
+      localStorage.removeItem('guestMode');
     },
     loginFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    },
+    setGuestMode: (state) => {
+      state.loading = false;
+      state.isGuest = true;
       state.isAuthenticated = false;
-      state.user = null;
-      localStorage.removeItem('weatherUser');
+      state.user = {
+        displayName: 'Guest User',
+        email: 'guest@weathersphere.com',
+        role: 'guest'
+      };
+      localStorage.setItem('guestMode', 'true');
     },
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
       state.isGuest = false;
+      state.loading = false;
       state.error = null;
-      localStorage.removeItem('weatherUser');
+      localStorage.removeItem('guestMode');
     },
-    clearAuthError: (state) => {
-      state.error = null;
-    },
-    setGuestMode: (state) => {
-      state.isGuest = true;
-      state.isAuthenticated = true;
-      state.user = null;
+    updateUser: (state, action) => {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+      }
     },
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout, clearAuthError, setGuestMode } = authSlice.actions;
+export const { 
+  loginStart, 
+  loginSuccess, 
+  loginFailure, 
+  setGuestMode, 
+  logout,
+  updateUser 
+} = authSlice.actions;
+
 export default authSlice.reducer;
